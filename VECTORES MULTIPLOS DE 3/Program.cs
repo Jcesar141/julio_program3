@@ -7,14 +7,19 @@ class Program
         // Definir un vector de cinco dígitos
         int[] vector = { 1, 2, 3, 4, 5 };
 
-        // Mostrar los números múltiplos de 3 en el vector
-        Console.WriteLine("Los números múltiplos de 3 en el vector son:");
+        // Variable para contar cuántos números son múltiplos de 3
+        int contadorMultiplosDe3 = 0;
+
+        // Contar los números múltiplos de 3 en el vector
         foreach (int num in vector)
         {
             if (num % 3 == 0) // Comprobar si el número es múltiplo de 3
             {
-                Console.WriteLine(num); // Mostrar el número múltiplo de 3
+                contadorMultiplosDe3++; // Incrementar el contador de múltiplos de 3
             }
         }
+
+        // Mostrar el resultado
+        Console.WriteLine("La cantidad de números múltiplos de 3 en el vector es: " + contadorMultiplosDe3);
     }
 }
