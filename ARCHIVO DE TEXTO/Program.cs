@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text.RegularExpressions;
 
 class Program
 {
@@ -14,28 +13,44 @@ class Program
 
         try
         {
-            // Leer todas las líneas del archivo de entrada
-            string[] lineas = File.ReadAllLines(rutaArchivoEntrada);
-
-            // Crear un arreglo para almacenar el conteo de vocales por línea
-            int[] conteoVocalesPorLinea = new int[lineas.Length];
-
-            // Contar las vocales por línea
-            for (int i = 0; i < lineas.Length; i++)
-            {
-                conteoVocalesPorLinea[i] = ContarVocales(lineas[i]);
-            }
-
-            // Escribir los resultados en el archivo de salida
+            // Crear un StreamWriter para escribir en el archivo de salida
             using (StreamWriter writer = new StreamWriter(rutaArchivoSalida))
             {
-                for (int i = 0; i < lineas.Length; i++)
+                // Leer cada línea del archivo de entrada y procesarla
+                using (StreamReader reader = new StreamReader(rutaArchivoEntrada))
                 {
-                    writer.WriteLine($"Línea {i + 1}: {conteoVocalesPorLinea[i]} vocales");
+                    string linea;
+                    int numeroLinea = 1;
+                    while ((linea = reader.ReadLine()) != null)
+                    {
+                        // Obtener los números de la línea
+                        string[] numeros = linea.Split(' ');
+                        foreach (string numero in numeros)
+                        {
+                            if (int.TryParse(numero, out int num))
+                            {
+                                if (EsPar(num))
+                                {
+                                    // Escribir el número par junto con la línea a la que pertenece en el archivo de salida
+                                    writer.WriteLine($"En la línea {numeroLinea} el número {num} es par.");
+                                }
+                                else
+                                {
+                                    // Escribir el número impar junto con la línea a la que pertenece en el archivo de salida
+                                    writer.WriteLine($"En la línea {numeroLinea} el número {num} es impar.");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine($"El valor '{numero}' en la línea {numeroLinea} no es un número válido y será ignorado.");
+                            }
+                        }
+                        numeroLinea++;
+                    }
                 }
             }
 
-            Console.WriteLine("Conteo de vocales por línea completado. Resultados guardados en 'salida.txt'");
+            Console.WriteLine($"Se han procesado las líneas del archivo de entrada y los resultados han sido guardados en '{rutaArchivoSalida}'");
         }
         catch (Exception ex)
         {
@@ -43,10 +58,8 @@ class Program
         }
     }
 
-    static int ContarVocales(string texto)
+    static bool EsPar(int numero)
     {
-        // Utilizar una expresión regular para contar las vocales
-        MatchCollection matches = Regex.Matches(texto, @"[aeiouAEIOU]");
-        return matches.Count;
+        return numero % 2 == 0;
     }
 }
